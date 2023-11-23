@@ -1,58 +1,63 @@
-const tous = document.getElementById("tous");
-const object = document.getElementById("object");
-const hotels = document.getElementById("hotels");
-const appartements = document.getElementById("appartements");
 const gallery = document.querySelector(".gallery");
+const buttons = document.querySelector(".filter-buttons");
 
-let selectedCategory = ""; // Track the selected category
-
-async function filterfunc() {
-  const data = await fetch("http://localhost:5678/api/categories");
-  const categories = await data.json();
-
-  tous.addEventListener("click", () => {
-    selectedCategory = "";
-    renderGallery();
-  });
-
-  object.addEventListener("click", () => {
-    renderGallery();
-  });
-
-  appartements.addEventListener("click", () => {
-    renderGallery();
-  });
-
-  hotels.addEventListener("click", () => {
-    renderGallery();
-  });
-}
+let selectedCategory = "";
 
 async function photoGallery() {
-  const data = await fetch("http://localhost:5678/api/works");
-  const works = await data.json();
-  console.log(works);
+  const dataWorks = await fetch("http://localhost:5678/api/works");
+  const works = await dataWorks.json();
 
   renderGallery(works);
 }
 
 function renderGallery(works) {
-  gallery.innerHTML = ""; // Clear the existing content
+  gallery.innerHTML = ''; // Clear the gallery before rendering
 
   for (let i in works) {
-    if (!selectedCategory || works[i].category === selectedCategory) {
-      const figure = document.createElement("figure");
-      const image = document.createElement("img");
-      const description = document.createElement("figcaption");
-
-      image.src = works[i].imageUrl;
-      image.alt = works[i].title;
-      description.innerText = works[i].title;
-
-      figure.appendChild(image);
-      figure.appendChild(description);
-      gallery.appendChild(figure);
+    // If a category is selected and it doesn't match the work's category, skip this iteration
+    if (selectedCategory && works[i].categoryId != selectedCategory) {
+      continue;
     }
+
+    const figure = document.createElement("figure");
+    figure.setAttribute("data-category-id", works[i].categoryId);
+
+    const image = document.createElement("img");
+    const description = document.createElement("figcaption");
+
+    image.src = works[i].imageUrl;
+    image.alt = works[i].title;
+    description.innerText = works[i].title;
+
+    figure.appendChild(image);
+    figure.appendChild(description);
+    gallery.appendChild(figure);
+  }
+}
+
+
+async function filterfunc() {
+  const dataCategories = await fetch("http://localhost:5678/api/categories");
+  const categories = await dataCategories.json();
+  const allBtn = document.createElement('button');
+  buttons.appendChild(allBtn);
+  allBtn.textContent = 'Tous';
+
+  allBtn.addEventListener("click", () => {
+    selectedCategory = ""; // Reset the selected category
+    photoGallery(); 
+  });
+
+  for (let i in categories) {
+    const myBtn = document.createElement('button');
+    buttons.appendChild(myBtn);
+    myBtn.textContent = categories[i].name;
+    myBtn.setAttribute("data-category-id", categories[i].id);
+
+    myBtn.addEventListener("click", () => {
+      selectedCategory = categories[i].id; // Set the selected category
+      photoGallery(); // Call the photoGallery function again to re-render the gallery
+    });
   }
 }
 
