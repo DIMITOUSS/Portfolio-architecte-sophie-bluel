@@ -60,6 +60,12 @@ async function filterfunc() {
     });
   }
 }
+  fetch('http://localhost:5678/api/users/login'),{
+    METHOD: 'POST',
+   Headers : 'accept: application/json',
+    Body: 'Content-Type: application/json' 
+   
+  } 
 
 // Call the functions
 filterfunc();
