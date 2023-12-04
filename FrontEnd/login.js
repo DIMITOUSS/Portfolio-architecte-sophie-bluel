@@ -26,7 +26,6 @@ const loginForm = document.querySelector("#login");
             if (data.message || data.error) {
                 alert("Erreur dans l\'identifiant ou le mot de passe");
             } else {
-                sessionStorage.setItem("isConnected", JSON.stringify(true));
                 window.location.replace("index.html");
             }
         })
