@@ -48,7 +48,8 @@ export function renderMiniWorks(category) {
 				divider.insertAdjacentElement("beforeBegin", modalWrapper);
 
 				// traitement des élèments supprimé
-				 trashCan.addEventListener("click", function () {
+				 trashCan.addEventListener("click", function (e) {
+                    e.preventDefault();
         const id = work.id;
 
         Swal.fire({
@@ -59,6 +60,7 @@ export function renderMiniWorks(category) {
             cancelButtonColor: '#3085d6',
             confirmButtonText: 'Oui, supprimer',
             cancelButtonText: 'Annuler',
+            timer:5000,
         }).then((result) => {
             if (result.isConfirmed) {
                 deleteWorks(id);

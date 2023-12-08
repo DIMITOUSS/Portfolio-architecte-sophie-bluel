@@ -6,8 +6,11 @@ export function modalFunction() {
 		const divTag = document.createElement("div");
 		divTag.setAttribute("id", "modal1");
 		divTag.classList.add("modal", "d-none");
-		divTag.setAttribute("aria-hidden", "true");
-		divTag.setAttribute("role", "dialogue");
+        divTag.setAttribute("aria-hidden", true);
+        divTag.setAttribute("role", "dialog");
+        divTag.setAttribute("tabindex", "-1");
+        divTag.setAttribute("aria-labelledby", "modalTitle");
+        divTag.setAttribute("aria-describedby", "modalDescription");
 		const main = document.querySelector("main");
 		main.appendChild(divTag);
 		return divTag;
@@ -98,7 +101,6 @@ addPhotoBtn.addEventListener("click", function (e) {
 	openModal();
     closeModal();
 
-// création d'une fonction pour ajouter une photo page 2 modal
 	function addPhotoContent() {
 		const newOuterDiv = document.querySelector(".modal-content");
 
@@ -179,6 +181,8 @@ addPhotoBtn.addEventListener("click", function (e) {
 		  });
 
 		  addPhotoBtn2.addEventListener("change", function (e) {
+       
+            e.preventDefault();
 			const file = e.target.files[0];
 			const reader = new FileReader();
 		  
@@ -210,39 +214,48 @@ addPhotoBtn.addEventListener("click", function (e) {
 
 		addPhotoForm.appendChild(addPhotoTitleLabel);
 		addPhotoForm.appendChild(addPhotoTitleInput);
-// mettre la catégorie
-		const addPhotoCategorieLabel = document.createElement("label");
-		addPhotoCategorieLabel.setAttribute("for", "category");
-		addPhotoCategorieLabel.innerText = "Catégorie";
-		addPhotoCategorieLabel.classList.add("titre", "titre-margin-top");
-		addPhotoForm.appendChild(addPhotoCategorieLabel);
-// choisir la catégorie
-		const selectCategory = document.createElement("select");
-		selectCategory.className = "select-category";
-		selectCategory.setAttribute("id", "select-category");
-		selectCategory.setAttribute("name", "category");
-		addPhotoForm.appendChild(selectCategory);
-
-		fetch("http://localhost:5678/api/categories")
-			.then((response) => {
-				console.log(response.status);
-		
-				if (response.ok) {
-					return response.json();
-				} else {
-					throw new Error("Erreur de la requête");
-				}
-			})
-
-			.then((categories) => {
-				const selectCategory = document.getElementById("select-category");
-				categories.forEach((category) => {
-					const newOption = document.createElement("option");
-					newOption.innerText = category.name;
-					newOption.setAttribute("value", category.id);
-					selectCategory.appendChild(newOption);
-				});
-			});
+        const selectCategory = document.createElement("select");
+        selectCategory.className = "select-category";
+        selectCategory.setAttribute("id", "select-category");
+        selectCategory.setAttribute("name", "category");
+        
+        // Create a default placeholder option
+        const placeholderOption = document.createElement("option");
+        placeholderOption.text = "Select a category";
+        placeholderOption.disabled = true;
+        placeholderOption.selected = false; // Make it selected by default
+        selectCategory.appendChild(placeholderOption);
+        
+        addPhotoForm.appendChild(selectCategory);
+        
+        // Fetch categories only when the user interacts with the select element
+        selectCategory.addEventListener("click", () => {
+            // Check if options have already been loaded
+            if (selectCategory.childElementCount === 1) {
+                fetch("http://localhost:5678/api/categories")
+                    .then((response) => {
+                        console.log(response.status);
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error("Erreur de la requête");
+                        }
+                    })
+                    .then((categories) => {
+                        // Remove the placeholder option
+                        selectCategory.removeChild(placeholderOption);
+        
+                        // Populate the select element with fetched categories
+                        categories.forEach((category) => {
+                            const newOption = document.createElement("option");
+                            newOption.innerText = category.name;
+                            newOption.setAttribute("value", category.id);
+                            selectCategory.appendChild(newOption);
+                        });
+                    });
+            }
+        });
+        
 	
 		const divider = document.createElement("hr");
 		divider.classList.add("divider");
