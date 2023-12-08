@@ -2,7 +2,6 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
 html,
 body,
 div,
@@ -653,4 +652,40 @@ form {
 .Envoyer{
 	border-radius: 60px;
 background: #1D6154;
+}
+.filter-buttons{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding: 20px 0;
+	gap: 1rem;
+
+}
+.filter-buttons button{
+	padding: .5rem;
+
+}
+.filter-buttons button:hover{
+	background: #1D6154;
+	color: white;
+}
+.login{
+	display: flex;
+	flex-direction: column;
+justify-content:center ;
+align-items: center;}
+.login-form{
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	justify-content: center;
+	justify-items: center;
+}
+.login-form button{
+	background-color: #1D6154;
+	color: white;
+	width: 179px;
+	justify-content: center;
+	justify-items: center;
+	display: flex;
 }
