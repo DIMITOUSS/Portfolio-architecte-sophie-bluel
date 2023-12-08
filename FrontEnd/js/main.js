@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
   if (tokenExists) {
     setupAdminMode();
     modalFunction();
-
     
   }
 
