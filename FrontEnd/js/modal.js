@@ -1,112 +1,116 @@
-
 import { renderMiniWorks } from "./miniwork.js";
 
 export function modalFunction() {
-	const createModal = function (e) {
-		const divTag = document.createElement("div");
-		divTag.setAttribute("id", "modal1");
-		divTag.classList.add("modal", "d-none");
-        divTag.setAttribute("aria-hidden", true);
-        divTag.setAttribute("role", "dialog");
-        divTag.setAttribute("tabindex", "-1");
-        divTag.setAttribute("aria-labelledby", "modalTitle");
-        divTag.setAttribute("aria-describedby", "modalDescription");
-		const main = document.querySelector("main");
-		main.appendChild(divTag);
-		return divTag;
-	  };
-//create modal content
-	function createModalContent() {
-		const newOuterDiv = document.createElement("div");
-		newOuterDiv.classList.add("modal-content", "d-none");
+    // Function to create and append the modal element
+    const createModal = function () {
+        const modalDiv = document.createElement("div");
+        modalDiv.id = "modal1";
+        modalDiv.classList.add("modal", "d-none");
+        modalDiv.setAttribute("aria-hidden", true);
+        modalDiv.setAttribute("role", "dialog");
+        modalDiv.setAttribute("tabindex", "-1");
+        modalDiv.setAttribute("aria-labelledby", "modalTitle");
+        modalDiv.setAttribute("aria-describedby", "modalDescription");
 
-		const newInnerDiv = document.createElement("div");
-		newInnerDiv.classList.add("modal-wrapper");
-//create modal close 
-		const closeX = document.createElement("span");
-		closeX.className = "close";
-		closeX.innerText = "x";
-		const modalTitle = document.createElement("h3");
-		modalTitle.innerText = "Galerie Photo";
-//devider line
-		const divider = document.createElement("hr");
-		divider.className = "divider";
+        const main = document.querySelector("main");
+        main.appendChild(modalDiv);
 
-		const addPhotoBtn = document.createElement("button");
-		addPhotoBtn.innerText = "Ajouter une photo";
-		addPhotoBtn.classList.add("next-page")
-//button to the next page of modal
-addPhotoBtn.addEventListener("click", function (e) {
-	e.stopPropagation();
-	e.preventDefault();
-	const modalContent = document.querySelector('.modal-wrapper')
-	modalContent.classList.add("d-none");
-	const nextPage = document.querySelector('.modal-ajouter-wrapper')
-	nextPage.classList.remove("d-none")
-});
+        return modalDiv;
+    };
 
-		const deleteGalleryLink = document.createElement("a");
-		deleteGalleryLink.innerText = "Supprimer la galerie";
+    // Function to create modal content
+    function createModalContent() {
+        const modalDiv = createModal();
 
-		//création d'une div globale: ajoute un enfant dans la div puis regroupé dans le conteneur de la modal 
-		//transformer en fonction!!!!
-		newOuterDiv.appendChild(closeX);
-		newInnerDiv.appendChild(modalTitle);
-		newInnerDiv.appendChild(divider);
-		newInnerDiv.appendChild(addPhotoBtn);
-		newInnerDiv.appendChild(deleteGalleryLink);
-		newOuterDiv.appendChild(newInnerDiv);
-//pour finir j'ajoute le contenu de la modal dans la page 1 de la modal
-		const modalDiv = document.getElementById("modal1");
-		modalDiv.appendChild(newOuterDiv);
+        const modalContentDiv = document.createElement("div");
+        modalContentDiv.classList.add("modal-content", "d-none");
 
-		renderMiniWorks();
+        const modalWrapperDiv = document.createElement("div");
+        modalWrapperDiv.classList.add("modal-wrapper");
 
-	}
-	//création de l'ensemble des fonctions à l'utilisation de ma modal
-	//fonction d'ouverture
-	function openModal() {
-		const modalHTML = document.querySelector(".admin-div");
-		modalHTML.addEventListener("click", function (e) {
-			e.preventDefault()
-		  const modalTag = document.getElementById('modal1');
-		  const modalContent = document.querySelector('.modal-content')
-		  modalTag.classList.remove("d-none");
-		  modalContent.classList.remove("d-none");
-		});
-	  }
-//fonction de fermeture
-	function closeModal() {
-		const closeX = document.querySelector(".close");
-		const modalOverlay = document.getElementById("modal1")
-		closeX.addEventListener("click", function () {
-			const modalTag = document.getElementById('modal1');
-			const modalContent = document.querySelector('.modal-content')
-			modalTag.classList.add("d-none");
-			modalContent.classList.add("d-none");
-		});
-		window.addEventListener("click", function(event) {
-			if (event.target == modalOverlay) {
-				const modalTag = document.getElementById('modal1');
-				const modalContent = document.querySelector('.modal-content')
-				modalTag.classList.add("d-none");
-				modalContent.classList.add("d-none");
-			}
-		  });
-	  }
-//ouverture de la boite de dialogue modal 2 
-	createModal();
-	createModalContent();
-	addPhotoContent();
-	openModal();
-    closeModal();
+        const closeX = document.createElement("span");
+        closeX.className = "close";
+        closeX.innerText = "x";
+
+        const modalTitle = document.createElement("h3");
+        modalTitle.innerText = "Galerie Photo";
+
+        const divider = document.createElement("hr");
+        divider.className = "divider";
+
+        const addPhotoBtn = document.createElement("button");
+        addPhotoBtn.innerText = "Ajouter une photo";
+        addPhotoBtn.classList.add("next-page");
+
+        // Button to navigate to the next page of the modal
+        addPhotoBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            const modalContent = document.querySelector('.modal-wrapper');
+            modalContent.classList.add("d-none");
+            const nextPage = document.querySelector('.modal-ajouter-wrapper');
+            nextPage.classList.remove("d-none");
+        });
+
+        const deleteGalleryLink = document.createElement("a");
+        deleteGalleryLink.innerText = "Supprimer la galerie";
+
+        modalWrapperDiv.appendChild(closeX);
+        modalWrapperDiv.appendChild(modalTitle);
+        modalWrapperDiv.appendChild(divider);
+        modalWrapperDiv.appendChild(addPhotoBtn);
+        modalWrapperDiv.appendChild(deleteGalleryLink);
+        modalContentDiv.appendChild(modalWrapperDiv);
+
+        const modalHTML = document.getElementById("modal1");
+        modalHTML.appendChild(modalContentDiv);
+
+        renderMiniWorks();
+    }
+
+    // Function to open the modal
+    function openModal() {
+        const modalHTML = document.querySelector(".admin-div");
+        modalHTML.addEventListener("click", function (e) {
+            e.preventDefault();
+            const modalTag = document.getElementById('modal1');
+            const modalContent = document.querySelector('.modal-content');
+            modalTag.classList.remove("d-none");
+            modalContent.classList.remove("d-none");
+        });
+    }
+
+    // Function to close the modal
+    function closeModal() {
+        const closeX = document.querySelector(".close");
+        const modalOverlay = document.getElementById("modal1");
+
+        closeX.addEventListener("click", function () {
+            closeOrHideModal();
+        });
+
+        window.addEventListener("click", function (event) {
+            if (event.target == modalOverlay) {
+                closeOrHideModal();
+            }
+        });
+    }
+
+    // Function to either close or hide the modal and its content
+    function closeOrHideModal() {
+        const modalTag = document.getElementById('modal1');
+        const modalContent = document.querySelector('.modal-content');
+        modalTag.classList.add("d-none");
+        modalContent.classList.add("d-none");
+    }
+	
 
 	function addPhotoContent() {
 		const newOuterDiv = document.querySelector(".modal-content");
 
 		const newInnerDiv = document.createElement("div");
 		newInnerDiv.classList.add("modal-ajouter-wrapper", "d-none");
-		//fléche retour
+		//return arrow
 		const returnArrow = document.createElement("i");
 		returnArrow.classList.add("return-arrow", "fa-solid", "fa-arrow-left-long");
 		returnArrow.addEventListener("click", function () {
@@ -126,7 +130,7 @@ addPhotoBtn.addEventListener("click", function (e) {
 			"fa-image",
 			"image-placeholder"
 		);
-//ajout d'un formulaire d'ajout de photo
+//form to add pictures
 		const addPhotoForm = document.createElement("form");
 		addPhotoForm.setAttribute("enctype", "multipart/form-data");
 		addPhotoForm.setAttribute("method", "post");
@@ -223,7 +227,7 @@ addPhotoBtn.addEventListener("click", function (e) {
         const placeholderOption = document.createElement("option");
         placeholderOption.text = "Select a category";
         placeholderOption.disabled = true;
-        placeholderOption.selected = false; // Make it selected by default
+        placeholderOption.selected = true; // Make it selected by default
         selectCategory.appendChild(placeholderOption);
         
         addPhotoForm.appendChild(selectCategory);
@@ -233,14 +237,7 @@ addPhotoBtn.addEventListener("click", function (e) {
             // Check if options have already been loaded
             if (selectCategory.childElementCount === 1) {
                 fetch("http://localhost:5678/api/categories")
-                    .then((response) => {
-                        console.log(response.status);
-                        if (response.ok) {
-                            return response.json();
-                        } else {
-                            throw new Error("Erreur de la requête");
-                        }
-                    })
+                    .then(handleResponse)
                     .then((categories) => {
                         // Remove the placeholder option
                         selectCategory.removeChild(placeholderOption);
@@ -296,64 +293,87 @@ addPhotoBtn.addEventListener("click", function (e) {
 	}
 
 
-	//fonction retour
+	//navigate to previous page
 	function previousPageModal() {
+
 		const divToHide = document.querySelector(".modal-ajouter-wrapper");
 		divToHide.classList.add('d-none');
 		const divToShow = document.querySelector(".modal-wrapper");
 		divToShow.classList.remove('d-none');
 	}
-	//ajout d'une photo + comm avec le serveur
-	function uploadWork() {
-		const addPhotoForm = document.getElementById("ajouterPhotoForm");
-		const formData = new FormData(addPhotoForm);
-	
-		console.log(formData)
-
-		fetch("http://localhost:5678/api/works/", {
-			method: "POST",
-			headers: {
-				Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
-			},
-			body: formData,
-		})
-			.then((response) => {
-				console.log(response.status);
-		
-				if (response.ok) {
-					return response.json();
-				} else {
-					throw new Error("Erreur de la requête");
-				}
-			})
-			//mettre les conditions if
-			.then((data) => {
-				const gallery = document.querySelector('.gallery');
-				const miniGallery = document.querySelector('.miniGallery');
-				//faire appel à renderworks
-				const figureGallery = document.createElement('figure');
-				const title = document.createElement('figcaption');
-				const img = document.createElement('img');
-				img.src = data.imageUrl;
-				title.innerText = data.title;
-
-				figureGallery.appendChild(img);
-				figureGallery.appendChild(title);
-				gallery.appendChild(figureGallery);
-
-				const figureClone = figureGallery.cloneNode(true);
-				miniGallery.appendChild(figureClone);
-				console.log("Success:", data);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Succès!',
-                    text: 'Photo téléchargée avec succès.',
-                });
-                            }).then(() => {
-                                closeModal();  
-                            })
-			.catch((error) => {
-				console.error("Error:", error);
-			});
-	}
+    function uploadWork() {
+        const addPhotoForm = document.getElementById("ajouterPhotoForm");
+        const formData = new FormData(addPhotoForm);
+    
+    
+        fetch("http://localhost:5678/api/works/", {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + window.sessionStorage.getItem("Token"),
+            },
+            body: formData,
+        })
+        .then(handleResponse)
+        .then((data) => {
+            renderWorks(data);
+            displaySuccessMessage();
+        })
+        .then(closeModal)
+        .catch(handleError);
+    }
+    
+    // Function to handle the response from the server
+    function handleResponse(response) {
+        console.log(response.status);
+    
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error("Erreur de la requête");
+        }
+    }
+    
+    // Function to render the uploaded works in the gallery
+    function renderWorks(data) {
+        const gallery = document.querySelector('.gallery');
+        const miniGallery = document.querySelector('.miniGallery');
+        
+        const figureGallery = document.createElement('figure');
+        const title = document.createElement('figcaption');
+        const img = document.createElement('img');
+        
+        img.src = data.imageUrl;
+        title.innerText = data.title;
+    
+        figureGallery.appendChild(img);
+        figureGallery.appendChild(title);
+        gallery.appendChild(figureGallery);
+    
+        const figureClone = figureGallery.cloneNode(true);
+        miniGallery.appendChild(figureClone);
+    
+        console.log("Success:", data);
+    }
+    
+    // Function to display success message using Swal library
+    function displaySuccessMessage() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Succès!',
+            text: 'Photo téléchargée avec succès.',
+        });
+    }
+    
+    // Function to handle errors during the upload process
+    function handleError(error) {
+        console.error("Error:", error);
+    }
+    
+    
+    // Call the functions to set up the modal
+    createModal();
+    createModalContent();
+    addPhotoContent();
+    openModal();
+    closeModal();
 }
